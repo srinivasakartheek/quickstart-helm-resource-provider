@@ -42,6 +42,7 @@ type HelmStatusData struct {
 	ChartVersion string         `json:",omitempty"`
 	Chart        string         `json:",omitempty"`
 	Manifest     string         `json:",omitempty"`
+	Description  string `json:",omitempty"`
 }
 type HelmListData struct {
 	ReleaseName  string `json:",omitempty"`
@@ -142,12 +143,13 @@ func addHelmRepoUpdate(name string, url string, settings *cli.EnvSettings) error
 	return nil
 }
 
-// HelmInstall invokes the helm uninstall client
-func (c *Clients) HelmInstall(config *Config, values map[string]interface{}, chart *Chart) error {
+// HelmInstall invokes the helm install client
+func (c *Clients) HelmInstall(config *Config, values map[string]interface{}, chart *Chart, id string) error {
 	log.Printf("Installing release %s", *config.Name)
 	var cp string
 	var err error
 	client := action.NewInstall(c.HelmClient)
+	client.Description = id
 	client.ReleaseName = *config.Name
 
 	switch *chart.ChartType {
@@ -197,16 +199,30 @@ func (c *Clients) HelmInstall(config *Config, values map[string]interface{}, cha
 	}
 
 	err = c.createNamespace(*config.Namespace)
+	// Here is fine still
 	if err != nil {
 		return err
 	}
 	client.Namespace = *config.Namespace
-
-	rel, err := client.Run(chartRequested, values)
+	_, err = client.Run(chartRequested, values)
 	if err != nil {
-		return genericError("Helm install", err)
+		if err.Error() != "cannot re-use a name that is still in use" {
+			return genericError("Helm install", err)
+		}
+		fmt.Printf("status.Description: \"%v\" id: \"%v\"\n", status.Description, id)
+		for {
+			status, staterr := c.HelmStatus(client.ReleaseName)
+			if staterr != nil {
+				return genericError("Helm status error", staterr)
+			}
+			if status.Description != "Initial install underway" { break }
+			fmt.Println("Waiting for description to be populated...")
+			time.Sleep(5 * time.Second)
+		}
+		if status.Description != id {
+			return genericError("another release exists with the same name", err)
+		}
 	}
-	log.Println("Successfully installed release: ", rel.Name)
 	return nil
 }
 
@@ -244,6 +260,7 @@ func (c *Clients) HelmStatus(name string) (*HelmStatusData, error) {
 		h.Manifest = res.Manifest
 		if res.Info != nil {
 			h.Status = res.Info.Status
+			h.Description = res.Info.Description
 		}
 		if res.Chart != nil {
 			h.ChartName = res.Chart.Metadata.Name
