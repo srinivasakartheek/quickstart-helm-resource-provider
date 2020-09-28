@@ -42,7 +42,7 @@ type HelmStatusData struct {
 	ChartVersion string         `json:",omitempty"`
 	Chart        string         `json:",omitempty"`
 	Manifest     string         `json:",omitempty"`
-	Description  string `json:",omitempty"`
+	Description  string         `json:",omitempty"`
 }
 type HelmListData struct {
 	ReleaseName  string `json:",omitempty"`
@@ -205,17 +205,24 @@ func (c *Clients) HelmInstall(config *Config, values map[string]interface{}, cha
 	}
 	client.Namespace = *config.Namespace
 	_, err = client.Run(chartRequested, values)
+
 	if err != nil {
 		if err.Error() != "cannot re-use a name that is still in use" {
 			return genericError("Helm install", err)
 		}
+		status, staterr := c.HelmStatus(client.ReleaseName)
+		if staterr != nil {
+			return genericError("Helm status error", staterr)
+		}
 		fmt.Printf("status.Description: \"%v\" id: \"%v\"\n", status.Description, id)
 		for {
-			status, staterr := c.HelmStatus(client.ReleaseName)
+			status, staterr = c.HelmStatus(client.ReleaseName)
 			if staterr != nil {
 				return genericError("Helm status error", staterr)
 			}
-			if status.Description != "Initial install underway" { break }
+			if status.Description != "Initial install underway" {
+				break
+			}
 			fmt.Println("Waiting for description to be populated...")
 			time.Sleep(5 * time.Second)
 		}
