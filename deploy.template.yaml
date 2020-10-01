@@ -91,6 +91,7 @@ Resources:
                 Action:
                   - "cloudformation:*"
                   - "iam:PassRole"
+                  - "s3:GetObject"
                 Resource: "*"
   RegisterTypeFunction:
     Type: "AWS::Lambda::Function"
