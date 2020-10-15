@@ -4,20 +4,15 @@ go 1.13
 
 require (
 	github.com/aws-cloudformation/cloudformation-cli-go-plugin v1.0.1-0.20200827221319-c1261e85f57d
-	github.com/aws/aws-lambda-go v1.17.0
-	github.com/aws/aws-sdk-go v1.31.12
-	github.com/evanphx/json-patch v4.5.0+incompatible // indirect
+	github.com/aws/aws-lambda-go v1.19.1
+	github.com/aws/aws-sdk-go v1.35.7
 	github.com/gofrs/flock v0.7.1
-	github.com/golang/protobuf v1.3.5 // indirect
-	github.com/googleapis/gnostic v0.3.1 // indirect
 	github.com/imdario/mergo v0.3.9 // indirect
-	github.com/json-iterator/go v1.1.9 // indirect
 	github.com/kr/pretty v0.2.0 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.6.1
-	golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
-	helm.sh/helm/v3 v3.3.1
+	helm.sh/helm/v3 v3.3.4
 	k8s.io/api v0.18.8
 	k8s.io/apiextensions-apiserver v0.18.8
 	k8s.io/apimachinery v0.18.8
@@ -26,7 +21,7 @@ require (
 	k8s.io/kubectl v0.18.8
 	k8s.io/kubernetes v1.18.8
 	rsc.io/letsencrypt v0.0.3 // indirect
-	sigs.k8s.io/aws-iam-authenticator v0.5.0
+	sigs.k8s.io/aws-iam-authenticator v0.5.2
 	sigs.k8s.io/yaml v1.2.0
 )
 
