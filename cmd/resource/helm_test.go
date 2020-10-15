@@ -145,6 +145,7 @@ func TestHelmStatus(t *testing.T) {
 				Status:       "deployed",
 				Namespace:    "default",
 				ChartVersion: "0.1.0",
+				Description:  "Named Release Stub",
 				Manifest:     TestManifest,
 			},
 		},

@@ -312,6 +312,9 @@ func TestHelmInstallWrapper(t *testing.T) {
 			},
 			ValueOpts: map[string]interface{}{},
 		},
+		Model: &Model{
+			ID: aws.String("function1"),
+		},
 	}
 	event.Inputs.ChartDetails, _ = getChartDetails(&Model{Chart: aws.String(testServer.URL + "/test.tgz")})
 	tests := []bool{true, false}
