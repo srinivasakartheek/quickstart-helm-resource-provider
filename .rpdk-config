@@ -6,7 +6,8 @@
     "testEntrypoint": "handler",
     "settings": {
         "importpath": "github.com/aws-quickstart/quickstart-helm-resource-provider",
-        "pluginVersion": "2.0.0",
+        "import_path": "github.com/aws-quickstart/quickstart-helm-resource-provider",
+        "pluginVersion": "2.0.2",
         "protocolVersion": "2.0.0"
     }
 }

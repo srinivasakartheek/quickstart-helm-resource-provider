@@ -95,11 +95,8 @@
         "Chart"
     ],
     "readOnlyProperties": [
-        "/properties/Name",
-        "/properties/Namespace",
-        "/properties/Chart",
-        "/properties/Version",
-        "/properties/Resources"
+        "/properties/Resources",
+        "/properties/ID"
     ], 
     "primaryIdentifier": [
         "/properties/ID"
