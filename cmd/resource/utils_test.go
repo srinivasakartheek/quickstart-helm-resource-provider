@@ -137,7 +137,7 @@ func TestGetChartDetails(t *testing.T) {
 				ChartRepo:    aws.String("stable"),
 				ChartName:    aws.String("test"),
 				ChartType:    aws.String("Remote"),
-				ChartRepoURL: aws.String("https://kubernetes-charts.storage.googleapis.com"),
+				ChartRepoURL: aws.String("https://charts.helm.sh/stable"),
 				ChartVersion: aws.String("1.0.0"),
 			},
 			expectedError: nil,
@@ -151,7 +151,7 @@ func TestGetChartDetails(t *testing.T) {
 				ChartName:    aws.String("chart"),
 				ChartType:    aws.String("Local"),
 				ChartPath:    aws.String("s3://test/chart-1.0.1.tgz"),
-				ChartRepoURL: aws.String("https://kubernetes-charts.storage.googleapis.com"),
+				ChartRepoURL: aws.String("https://charts.helm.sh/stable"),
 			},
 		},
 	}

@@ -30,7 +30,7 @@ func TestAddHelmRepoUpdate(t *testing.T) {
 	}{
 		"StableRepo": {
 			name:   "stable",
-			url:    "https://kubernetes-charts.storage.googleapis.com",
+			url:    "https://charts.helm.sh/stable",
 			eCount: 1,
 		},
 		"WrongRepo": {
