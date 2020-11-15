@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
-	"k8s.io/cli-runtime/pkg/genericclioptions"
 	"log"
 	"os"
 	"path/filepath"
@@ -12,6 +11,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"k8s.io/cli-runtime/pkg/genericclioptions"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/gofrs/flock"
@@ -353,6 +354,16 @@ func (c *Clients) HelmUpgrade(name string, config *Config, values map[string]int
 		if err := action.CheckDependencies(ch, req); err != nil {
 			return genericError("Helm Upgrade", err)
 		}
+	}
+
+	lastRelease, err := c.HelmClient.Releases.Last(name)
+	if err != nil {
+		return genericError("Helm Upgrade", err)
+	}
+
+	if lastRelease.Info.Status == release.StatusPendingUpgrade && lastRelease.Chart.Metadata.Version == ch.Metadata.Version {
+		log.Printf("Version %s of release %s is still pending", name, ch.Metadata.Version)
+		return nil
 	}
 
 	rel, err := client.Run(name, ch, values)
